@@ -1,313 +1,490 @@
-# SalesGenie AI — Developer Hub & Documentation
+# 🧠 SalesGenie AI — Intelligent B2B Sales Automation Platform
 
-SalesGenie AI is an advanced, production-grade B2B Sales Intelligence and AI-powered Outreach Automation platform. It enables sales representatives and business developers to manage prospects, generate AI-driven qualification insights, and compose personalized email copy tailored to target segments.
+<div align="center">
 
-The platform is architected as an asynchronous backend API powered by **FastAPI**, backed by a relational **PostgreSQL** database managed via **SQLAlchemy ORM**, and driven by an intuitive front-end interface built on **Streamlit**.
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.36+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq_LLM-Llama--3.3--70b-F55036?style=for-the-badge)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge&logo=openai&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+**A production-grade, AI-powered B2B Sales Intelligence and Outreach Automation system — built as a full-stack intern project.**
+
+[Features](#-features) · [Architecture](#-system-architecture) · [Setup](#-installation--setup) · [Modules](#-module-breakdown) · [API Reference](#-api-reference) · [Contributing](#-contributing)
+
+</div>
 
 ---
 
-## 1. System Architecture
+## 📌 Overview
 
-```mermaid
-graph TD
-    Streamlit[Streamlit Frontend :8502] -->|HTTP REST| FastAPI[FastAPI Backend :8000]
-    FastAPI -->|SQLAlchemy ORM| PostgreSQL[(PostgreSQL Database)]
-    FastAPI -->|OpenAI SDK / API| LLM[LLM API: Groq / OpenAI]
+**SalesGenie AI** is a fully integrated sales intelligence platform that empowers B2B sales teams and business developers to:
+
+- **Manage prospects** with full CRUD operations via a structured lead pipeline
+- **Generate AI-driven qualification insights** — score leads, identify opportunities, and surface business needs using LLM inference
+- **Compose personalized outreach** — AI-written cold emails and follow-ups tailored to each lead's profile
+- **Track conversations** — log interactions, retrieve history, and get AI-generated conversation summaries
+- **Visualize pipeline health** — real-time KPIs, funnel analytics, and lead ranking dashboards
+
+The platform is architected as a **decoupled, microservice-inspired backend** powered by **FastAPI**, persisted in a relational **PostgreSQL** database through **SQLAlchemy ORM**, and surfaced via a rich **Streamlit** dashboard with a customized dark UI theme.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 🗂️ Lead Management | Full CRUD — create, read, update, delete leads with company, contact, and segment data |
+| 🤖 AI Qualification | LLM-powered 0–100 qualification score, label, business needs, and reasoning breakdown |
+| 📧 Outreach Generation | AI-personalized cold email + follow-up email composer with campaign history |
+| 🏆 Priority Scoring | Multi-factor priority ranking engine with What-If simulation |
+| 💬 Conversation Intelligence | CRM-style interaction logging + AI-generated digest summaries |
+| 📊 Analytics Dashboard | Real-time KPIs, pipeline funnel, score distribution, outreach stats, top-5 leads |
+| 🔄 Dual LLM Support | Primary: Groq (Llama-3.3-70b) — Fallback: OpenAI (GPT-4o-mini) |
+| 🌐 REST API | OpenAPI/Swagger docs at `/docs`, ReDoc at `/redoc` |
+
+---
+
+## 🏗️ System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        SalesGenie AI                            │
+│                                                                 │
+│  ┌──────────────────────┐     HTTP REST      ┌───────────────┐  │
+│  │  Streamlit Frontend  │ ─────────────────► │  FastAPI API  │  │
+│  │     app.py :8502     │ ◄───────────────── │  main.py :8000│  │
+│  └──────────────────────┘                    └───────┬───────┘  │
+│                                                      │           │
+│                                            SQLAlchemy ORM        │
+│                                                      │           │
+│                                             ┌────────▼────────┐  │
+│                                             │   PostgreSQL DB │  │
+│                                             │  database/      │  │
+│                                             │  models.py      │  │
+│                                             └─────────────────┘  │
+│                                                      │           │
+│                                             ┌────────▼────────┐  │
+│                                             │  LLM API Layer  │  │
+│                                             │ Groq → OpenAI   │  │
+│                                             └─────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Stack Components
-- **Frontend**: Streamlit (`app.py`), styled with a customized premium dark UI theme.
-- **Backend**: FastAPI (`main.py`) serving as a modular API Gateway mounting six decoupled domain routers.
-- **Database**: PostgreSQL with SQLAlchemy ORM representing schema definitions in `database/models.py` and managing connections in `database/connection.py`.
-- **AI Core**: Groq API (defaulting to Llama-3.3-70b) with dynamic fallback to OpenAI API (GPT-4o-mini).
+### Tech Stack at a Glance
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | Streamlit 1.36+ | Dashboard UI with dark theme, Plotly charts |
+| **Backend** | FastAPI 0.111+ | Async REST API with 6 modular domain routers |
+| **ORM** | SQLAlchemy 2.0+ | Model definitions, session management |
+| **Database** | PostgreSQL 15+ | Relational persistence for all entities |
+| **AI Core** | Groq (Llama-3.3-70b) | Primary LLM — fast inference |
+| **AI Fallback** | OpenAI (GPT-4o-mini) | Secondary LLM if Groq unavailable |
+| **Validation** | Pydantic 2.7+ | Request/response schema enforcement |
+| **Charts** | Plotly 5.22+ | Interactive dashboard visualizations |
+| **Concurrency** | Uvicorn + asyncio | ASGI server for async request handling |
 
 ---
 
-## 2. Directory Layout
+## 📁 Directory Layout
 
 ```
 salesgenie/
-├── .env                  # Local environment configuration (git-ignored)
-├── .env.example          # Environment variables template
-├── .gitignore            # Git exclusion definitions
-├── requirements.txt      # Python dependencies
-├── main.py               # FastAPI backend entrypoint (mounts all modules)
-├── app.py                # Streamlit dashboard interface
-├── run_all.py            # Co-orchestrator running both frontend and backend
-├── seed_data.py          # Database seeding script for mock leads & insights
+│
+├── main.py                     # FastAPI application entrypoint
+├── app.py                      # Streamlit frontend (1115 lines)
+├── run_all.py                  # One-command launcher: backend + frontend
+├── seed_data.py                # Sample data seeder for development
+├── requirements.txt            # Python dependency manifest
+├── .env                        # Environment variables (not committed)
+├── .gitignore                  # Git exclusion rules
+│
 ├── database/
 │   ├── __init__.py
-│   ├── connection.py     # Connection engine, sessionmaker, and table initializer
-│   └── models.py         # SQLAlchemy schemas (User, Lead, CompanyInsight, etc.)
+│   ├── connection.py           # SQLAlchemy engine, session, Base, init_db()
+│   └── models.py               # ORM models: User, Lead, CompanyInsight,
+│                               #   OutreachCampaign, SalesInteraction, LeadScore
+│
 └── modules/
     ├── __init__.py
-    ├── module1_leads.py          # Lead management CRUD & CRM activity logger
-    ├── module2_intelligence.py   # AI prospect qualification scoring & reasoning
-    ├── module3_outreach.py       # Personalized AI cold-outreach & follow-up generator
-    ├── module4_scoring.py        # Lead scoring & recommendation stubs (Milestone 2)
-    ├── module5_conversation.py   # Conversation intelligence stubs (Milestone 3)
-    └── module6_dashboard.py      # Sales analytics stubs (Milestone 4)
+    ├── module1_leads.py        # Lead CRUD + interaction history
+    ├── module2_intelligence.py # AI qualification analysis
+    ├── module3_outreach.py     # AI email generation & campaign storage
+    ├── module4_scoring.py      # Priority scoring engine + What-If sim
+    ├── module5_conversation.py # CRM interaction CRUD + AI summaries
+    └── module6_dashboard.py    # Aggregated KPIs & analytics endpoints
 ```
 
 ---
 
-## 3. Database Schema
+## 🗄️ Database Schema
 
-All domain entities are modeled in SQLAlchemy using the declarative base. The backend utilizes an **idempotent auto-migration** routine on startup (`Base.metadata.create_all`) to ensure tables are configured without manuals.
+```
+users
+  └─ user_id (PK), name, email, role, department, created_at
 
-```mermaid
-erDiagram
-    users ||--o{ leads : "manages"
-    leads ||--o{ company_insights : "has"
-    leads ||--o{ outreach_campaigns : "receives"
-    leads ||--o{ sales_interactions : "has"
+leads
+  ├─ lead_id (PK), company_name, industry, contact_name, title
+  ├─ email, phone, company_size, annual_revenue, location
+  ├─ funding_stage, tech_stack[], lead_status, segment
+  └─ created_by (FK → users), created_at, updated_at
 
-    users {
-        int user_id PK
-        string name
-        string email UK
-        string role
-        string department
-        timestamp created_at
-    }
+company_insights
+  └─ insight_id (PK), lead_id (FK), qualification_score, score_label,
+     business_needs[], opportunities[], industry_fit, ai_reasoning, created_at
 
-    leads {
-        int lead_id PK
-        string company_name
-        string industry
-        string contact_name
-        string title
-        string email
-        string phone
-        string company_size
-        string annual_revenue
-        string location
-        string funding_stage
-        string[] tech_stack
-        string lead_status
-        string segment
-        int created_by FK
-        timestamp created_at
-        timestamp updated_at
-    }
+outreach_campaigns
+  └─ campaign_id (PK), lead_id (FK), campaign_type, subject_line,
+     email_body, status, created_by (FK → users), created_at
 
-    company_insights {
-        int insight_id PK
-        int lead_id FK
-        int qualification_score
-        string score_label
-        text business_needs
-        text opportunities
-        text industry_analysis
-        jsonb reasoning
-        timestamp generated_at
-    }
+sales_interactions
+  └─ interaction_id (PK), lead_id (FK), user_id (FK), interaction_type,
+     notes, outcome, interaction_date, created_at
 
-    outreach_campaigns {
-        int campaign_id PK
-        int lead_id FK
-        string email_type
-        string tone
-        string email_subject
-        text email_content
-        string campaign_status
-        timestamp created_at
-    }
-
-    sales_interactions {
-        int interaction_id PK
-        int lead_id FK
-        string interaction_type
-        text summary
-        text action_items
-        timestamp interaction_date
-    }
+lead_scores
+  └─ score_id (PK), lead_id (FK, UNIQUE), priority_score, score_tier,
+     scoring_factors (JSONB), recommendations (JSONB),
+     last_scored_at, created_at
 ```
 
-### Table Definitions & Constraints
-1. **`users`**: Represents internal team members using the platform.
-2. **`leads`**: Central catalog of target prospects. Columns include company identifiers, financial profiling, contact details, technology list (represented via PostgreSQL `ARRAY(String)`), pipeline lifecycle stages (`lead_status`), and classification (`segment`).
-3. **`company_insights`**: Stores generated AI evaluations. Uses `ondelete="CASCADE"` on the `lead_id` foreign key. Includes a `reasoning` column defined as `JSONB` to capture structured factor arrays.
-4. **`outreach_campaigns`**: Logs AI-generated messages. Links back to the targeted lead. Captures metadata like tone, layout structure, and delivery state (`draft` vs `sent`).
-5. **`sales_interactions`**: Activity feed logs (Calls, Emails, Meetings, Notes) to record CRM engagements.
+---
+
+## 📦 Module Breakdown
+
+### Module 1 — Lead Management (`/leads`)
+> **The source of truth.** All other modules read from this data.
+
+- `POST /leads/` — Create a new lead
+- `GET /leads/` — List all leads (supports search, filter by status/segment, pagination)
+- `GET /leads/{lead_id}` — Retrieve a single lead
+- `PUT /leads/{lead_id}` — Update lead fields
+- `DELETE /leads/{lead_id}` — Delete a lead
+- `POST /leads/{lead_id}/interactions` — Log a sales interaction
+- `GET /leads/{lead_id}/interactions` — Fetch interaction history
 
 ---
 
-## 4. Module & API Architecture
+### Module 2 — Lead Intelligence (`/intelligence`)
+> **AI-powered company qualification** using stored lead profile data.
 
-### Module 1: Lead Management & CRM (`modules/module1_leads.py`)
-Responsible for prospect records and CRM timeline logs.
-- `GET /leads`
-  - **Query Parameters**:
-    - `q` (Optional): String filter matching `company_name`, `contact_name`, or `industry` case-insensitively.
-    - `status` (Optional): Stage filtering (`New`, `Contacted`, `Qualified`, etc.).
-    - `segment` (Optional): Market segmenting (`Enterprise`, `Mid-Market`, `Startup`).
-  - **Returns**: Array of full lead profiles sorted chronologically (`created_at DESC`).
-- `POST /leads`: Instantiates a lead. Accepts `LeadCreate` Pydantic payload.
-- `GET /leads/{lead_id}`: Retrieves profile details. Raises `404` error if non-existent.
-- `PUT /leads/{lead_id}`: Updates fields. Automatically updates `updated_at` timestamps.
-- `DELETE /leads/{lead_id}`: Removes lead and cascades deletes to related insights, campaigns, and logs.
-- `GET /leads/stages`: Returns valid lead pipeline states (`LEAD_STAGES`).
-- `POST /leads/{lead_id}/interactions`: Log activities like Calls, Emails, and Meetings with description notes.
-- `GET /leads/{lead_id}/interactions`: Retrieve chronological timeline activity history.
+- `POST /intelligence/analyze/{lead_id}` — Run LLM analysis, save `CompanyInsight`
+- `GET /intelligence/{lead_id}` — Retrieve stored insight for a lead
+- `GET /intelligence/status` — Health check
 
-### Module 2: Lead Intelligence (`modules/module2_intelligence.py`)
-Evaluates prospects against business fit using an LLM.
-- `POST /intelligence/generate/{lead_id}`: 
-  1. Pulls the target lead profile.
-  2. Compiles a detailed evaluation prompt defining the saas solution fit.
-  3. Deserializes the JSON response returned by the LLM.
-  4. Stores the analysis in `company_insights` with numeric qualification scores, textual opportunity details, and structured factors.
-- `GET /intelligence/{lead_id}`: Returns the latest generated report.
-- `GET /intelligence/{lead_id}/history`: Returns a historical log of all generated evaluations.
-- `GET /intelligence/health`: Reports LLM connector states (`llm_configured: true/false`).
-
-### Module 3: AI Outreach Generation (`modules/module3_outreach.py`)
-Drafts contextual cold emails and follow-ups.
-- `POST /outreach/generate`: Composes drafts using lead profiles and Module 2 insights.
-  - **Pydantic Body**:
-    ```json
-    {
-      "lead_id": 1,
-      "email_type": "cold_email",
-      "tone": "consultative",
-      "extra_context": "Mention their recent series B"
-    }
-    ```
-- `POST /outreach/save`: Commits a draft or registers an outreach campaign.
-- `GET /outreach/history/{lead_id}`: Returns all saved campaigns and statuses for the lead.
-- `PATCH /outreach/mark-sent/{campaign_id}`: Promotes draft campaigns to `sent` delivery states.
-
-### Modules 4, 5 & 6 (Future Milestones)
-Currently mounted as stub endpoints returning `501` or placeholder objects under:
-- `GET /scoring/status` (Lead Scoring - Milestone 2)
-- `GET /conversation/status` (Conversation Intelligence - Milestone 3)
-- `GET /dashboard/status` (Sales Analytics - Milestone 4)
+**AI Output Includes:**
+- Qualification score (0–100)
+- Score label (Hot / Warm / Cold / etc.)
+- Business needs (list)
+- Opportunities (list)
+- Industry fit analysis
+- Reasoning factors (bullet breakdown)
 
 ---
 
-## 5. LLM Integration & Prompt Engine
+### Module 3 — AI Outreach (`/outreach`)
+> **Personalized email generation** — cold emails + follow-up templates.
 
-SalesGenie AI features a unified client abstraction supporting **Groq** and **OpenAI**. 
+- `POST /outreach/generate/{lead_id}` — Generate email using LLM (type: `cold` / `followup`)
+- `GET /outreach/history/{lead_id}` — Retrieve campaign history for a lead
+- `GET /outreach/status` — Health check
 
-### Client Initialization
-The module reads keys from environment variables:
-1. If `GROQ_API_KEY` is present, it wraps it with the `OpenAI` client pointing to the Groq backend.
-2. If `GROQ_API_KEY` is absent but `OPENAI_API_KEY` is active, it connects to standard OpenAI endpoints.
-3. If neither is available, the generation routes raise an HTTP `503 Service Unavailable` error instead of throwing a stack trace:
-   ```python
-   raise HTTPException(
-       status_code=503,
-       detail="LLM not configured. Set GROQ_API_KEY or OPENAI_API_KEY in your .env file."
-   )
-   ```
-
-### Prompt Constraints & Guardrails
-- **Output Constraints**: Prompts instruct the LLM to output valid raw JSON. System prompts use `"You are a precise assistant that only outputs valid JSON."` to ensure structured parsing.
-- **Outreach Rules**: The cold email generation prompt enforces specific constraints:
-  - Text length must be under 150 words.
-  - Must address the specific tech stack and industry.
-  - Placeholders must not be used (e.g. `[Your Name]` is banned, defaulting to `"The SalesGenie Team"`).
+**Email Generation uses:** Lead profile + existing `CompanyInsight` (if available) for hyper-personalization.
 
 ---
 
-## 6. Local Setup Instructions
+### Module 4 — Priority Scoring (`/scoring`)
+> **Multi-factor lead ranking** with AI recommendations and simulation.
 
-Follow these steps to set up a local development sandbox.
+- `POST /scoring/score/{lead_id}` — Compute priority score, persist `LeadScore`
+- `GET /scoring/scores` — Ranked leaderboard with filters
+- `GET /scoring/{lead_id}` — Get score record for a lead
+- `POST /scoring/simulate` — What-If simulation (adjust factors, see hypothetical score)
+- `GET /scoring/status` — Health check
+
+**Scoring Factors Include:** Company size, revenue, funding stage, tech stack, engagement, segment fit, and LLM-derived bonus insights.
+
+---
+
+### Module 5 — Conversation Intelligence (`/conversation`)
+> **CRM-style interaction management** with AI digest generation.
+
+- `POST /conversation/log` — Log a new interaction (call, email, demo, etc.)
+- `GET /conversation/{lead_id}` — List all interactions for a lead
+- `PUT /conversation/{interaction_id}` — Edit interaction notes/outcome
+- `DELETE /conversation/{interaction_id}` — Delete an interaction
+- `POST /conversation/summarize/{lead_id}` — LLM summary of full history
+- `GET /conversation/status` — Health check
+
+---
+
+### Module 6 — Analytics Dashboard (`/dashboard`)
+> **Real-time business intelligence** aggregated across all tables.
+
+- `GET /dashboard/summary` — KPIs: total leads, active campaigns, avg score, hot leads
+- `GET /dashboard/pipeline` — Leads per pipeline stage (funnel chart)
+- `GET /dashboard/scoring-distribution` — Score tier breakdown
+- `GET /dashboard/outreach-stats` — Campaign counters by type/status
+- `GET /dashboard/top-leads` — Top 5 leads by priority score
+- `GET /dashboard/activity-timeline` — Recent N interactions timeline
+
+---
+
+## ⚙️ Installation & Setup
 
 ### Prerequisites
-- Python 3.10 or higher.
-- PostgreSQL server (running locally or remotely).
 
-### Installation
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/Divyabharathi23012007/SalesGenieAI.git
-   cd SalesGenieAI
-   ```
-
-2. **Initialize Python Environment**
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   
-   pip install -r requirements.txt
-   ```
-
-3. **Configure Environment Variables**
-   Copy the provided configuration template:
-   ```bash
-   cp .env.example .env
-   ```
-   Open `.env` and fill in the required keys:
-   ```dotenv
-   DATABASE_URL=postgresql://postgres:your_password@localhost:5432/salesgenie
-   GROQ_API_KEY=gsk_yourKeyGoesHere
-   ```
-
-4. **Prepare the Database**
-   Log into your PostgreSQL CLI or interface and create the target database:
-   ```sql
-   CREATE DATABASE salesgenie;
-   ```
-   *Note: Table schemas are auto-created on API boot.*
-
-5. **Seed Sample Data (Optional)**
-   Pre-populate the tables with four mock leads and an analytical evaluation to test Module 3:
-   ```bash
-   python seed_data.py
-   ```
+- Python **3.11+**
+- PostgreSQL **15+** running locally or via Docker
+- **Groq API key** (free tier available at [console.groq.com](https://console.groq.com))
+- **OpenAI API key** (fallback, optional)
 
 ---
 
-## 7. Running the Platform
+### 1. Clone the Repository
 
-Use the unified process orchestrator to boot both the FastAPI service and Streamlit client simultaneously:
+```bash
+git clone https://github.com/Gopika-rajendiran/SALESGENIE_AI_INTERN.git
+cd SALESGENIE_AI_INTERN
+```
 
+### 2. Create & Activate Virtual Environment
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS / Linux
+python -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+# Database
+DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/salesgenie
+
+# LLM APIs
+GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   # optional fallback
+
+# Service Ports (optional — defaults shown)
+FASTAPI_PORT=8000
+FASTAPI_URL=http://127.0.0.1:8000
+STREAMLIT_PORT=8502
+```
+
+### 5. Initialize the Database
+
+```bash
+# Create the PostgreSQL database
+psql -U postgres -c "CREATE DATABASE salesgenie;"
+
+# Tables are auto-created on first startup via SQLAlchemy
+# Optionally seed with sample data:
+python seed_data.py
+```
+
+### 6. Run the Application
+
+**Option A — Single command (recommended):**
 ```bash
 python run_all.py
 ```
+This launches both the FastAPI backend and Streamlit frontend simultaneously.
 
-- **Backend Docs (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Frontend Client**: [http://localhost:8502](http://localhost:8502)
+**Option B — Run services separately:**
+```bash
+# Terminal 1 — Backend
+uvicorn main:app --reload --port 8000
 
-To run backend or frontend independently:
-- **FastAPI**: `uvicorn main:app --reload --port 8000`
-- **Streamlit**: `streamlit run app.py --server.port 8502`
+# Terminal 2 — Frontend
+streamlit run app.py --server.port 8502
+```
 
----
+### 7. Access the Application
 
-## 8. Extension Guide for Feature Developers
-
-When building features on top of SalesGenie AI, adhere to the following rules:
-
-### Schema Updates
-- Database entities are centrally declared in [models.py](file:///e:/SKY/Moon/salesgenie/salesgenie/database/models.py).
-- If you add columns to `leads`, `company_insights`, or `outreach_campaigns`, verify that column types align perfectly with data parameters used in the modules.
-
-### Transitioning Stubs to Production
-1. **Module 4 (Scoring)**:
-   - File: `modules/module4_scoring.py`.
-   - Goal: Transition the `/scoring/status` stub into an evaluation model. Inject the DB session and utilize lead parameters (revenue, company size, and funding stage) to compute custom fit scores.
-2. **Module 5 (Conversations)**:
-   - File: `modules/module5_conversation.py`.
-   - Goal: Expand the router to consume audio file uploads or transcript logs, parse them with an LLM, and log call insights in `sales_interactions`.
-3. **Module 6 (Dashboard)**:
-   - File: `modules/module6_dashboard.py`.
-   - Goal: Aggregate and serve pipeline volume metrics, conversion rates, and campaign statistics to feed Streamlit dashboard cards.
+| Service | URL |
+|---|---|
+| 🖥️ Streamlit Dashboard | http://localhost:8502 |
+| ⚡ FastAPI Backend | http://localhost:8000 |
+| 📖 Swagger (OpenAPI) Docs | http://localhost:8000/docs |
+| 📘 ReDoc API Reference | http://localhost:8000/redoc |
 
 ---
 
-## 9. Troubleshooting
+## 🔑 API Reference
 
-### "Unable to connect to the FastAPI backend"
-- Verify that `FASTAPI_URL` in `.env` matches the port your FastAPI process is listening on.
-- Check terminal output of `run_all.py` for binding errors (such as port 8000 already in use).
-- Ensure your local machine permits connections across local loops.
+> Full interactive docs available at **`/docs`** (Swagger UI) and **`/redoc`** when the backend is running.
 
-### LLM Error: 502 Bad Gateway / JSONDecodeError
-- This happens when the API receives non-JSON data from the models. Retry the request. If it persists, inspect backend logs to view the raw LLM output.
+### Authentication
+Currently uses no authentication in development mode. Production deployments should add OAuth2 / JWT via FastAPI's `Security` utilities.
+
+### Base URL
+```
+http://localhost:8000
+```
+
+### Quick Request Examples
+
+**Create a Lead:**
+```bash
+curl -X POST http://localhost:8000/leads/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "company_name": "TechCorp Inc.",
+    "industry": "SaaS",
+    "contact_name": "Jane Doe",
+    "email": "jane@techcorp.com",
+    "company_size": "51-200",
+    "annual_revenue": "$5M-$10M",
+    "segment": "SMB"
+  }'
+```
+
+**Run AI Analysis:**
+```bash
+curl -X POST http://localhost:8000/intelligence/analyze/1
+```
+
+**Generate Cold Email:**
+```bash
+curl -X POST "http://localhost:8000/outreach/generate/1?campaign_type=cold"
+```
+
+**Get Dashboard KPIs:**
+```bash
+curl http://localhost:8000/dashboard/summary
+```
+
+---
+
+## 🤖 AI Integration Details
+
+### LLM Call Flow
+
+```
+Request → Module Handler
+    ↓
+Try: Groq API (Llama-3.3-70b-versatile)
+    ↓ [on error / timeout]
+Fallback: OpenAI API (gpt-4o-mini)
+    ↓
+Parse JSON response → Persist to DB → Return to frontend
+```
+
+### Prompt Strategy
+Each module crafts a **structured system prompt** combining:
+1. Lead profile data (company, size, revenue, tech stack, segment)
+2. Existing `CompanyInsight` data (if available — Module 3 uses Module 2's output)
+3. Task-specific instructions (qualification analysis / email tone / scoring factors)
+4. **Strict JSON output format** requirements for programmatic parsing
+
+---
+
+## 🧪 Development Notes
+
+### Seed Data
+```bash
+python seed_data.py
+```
+Populates the database with realistic sample leads, users, interactions, and scores for development and testing.
+
+### Environment Switching
+All configurable values are environment-variable driven. Use separate `.env.development`, `.env.production` files and load with `python-dotenv`.
+
+### Adding a New Module
+1. Create `modules/moduleN_name.py` with a FastAPI `APIRouter`
+2. Add ORM models to `database/models.py` if needed
+3. Mount the router in `main.py`:
+   ```python
+   from modules.moduleN_name import router as name_router
+   app.include_router(name_router, prefix="/name", tags=["Module N"])
+   ```
+4. Add the corresponding Streamlit page section in `app.py`
+
+---
+
+## 📊 Project Structure Summary
+
+```
+Total Python files  : 11
+Backend lines (est.): ~1,800 (modules + database)
+Frontend lines      : ~1,115 (app.py)
+API endpoints       : 25+
+Database tables     : 6
+LLM-powered modules : 4 (Intelligence, Outreach, Scoring, Conversation)
+```
+
+---
+
+## 🛡️ Security Considerations
+
+> **Important for production deployments:**
+
+- **.env is excluded from git** — never commit API keys or DB credentials
+- **CORS is open (`"*"`)** in this dev build — restrict to specific origins in production
+- **Add authentication** — implement JWT/OAuth2 before public deployment
+- **Use environment secrets** — store production keys in GitHub Secrets / cloud secret managers
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] JWT-based authentication layer
+- [ ] Email delivery integration (SendGrid / Postmark)
+- [ ] Real-time WebSocket notifications for scoring updates
+- [ ] Docker Compose deployment configuration
+- [ ] CI/CD pipeline with GitHub Actions
+- [ ] Unit & integration test suite (pytest)
+- [ ] Multi-tenant support (per-user lead isolation)
+- [ ] Export to CSV / Excel from dashboard
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'feat: add your feature description'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request
+
+Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👩‍💻 Author
+
+**Gopika Rajendiran**
+- GitHub: [@Gopika-rajendiran](https://github.com/Gopika-rajendiran)
+- Email: gopika2376@gmail.com
+
+---
+
+<div align="center">
+
+**Built with ❤️ as part of an AI/ML Internship Project**
+
+*SalesGenie AI — Powering smarter B2B sales, one lead at a time.*
+
+</div>
