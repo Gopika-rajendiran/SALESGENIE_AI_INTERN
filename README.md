@@ -1,4 +1,4 @@
-# 🧠 SalesGenie AI — Intelligent B2B Sales Automation Platform
+#  SalesGenie AI 
 
 <div align="center">
 
