@@ -417,7 +417,7 @@ All configurable values are environment-variable driven. Use separate `.env.deve
 
 <div align="center">
 
-**Built as part of an AI/ML Internship Project**
+**Built as part of an AI Internship Project**
 
 *_SalesGenie AI _*
 
