@@ -8,7 +8,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq_LLM-Llama--3.3--70b-F55036?style=for-the-badge)
 
-**A production-grade, AI-powered B2B Sales Intelligence and Outreach Automation system — built as a full-stack intern project.**
+**A production-grade, AI-powered Intelligence and Outreach Automation system — built as a AI intern project.**
 
 [Features](#-features) · [Architecture](#-system-architecture)  · [Modules](#-module-breakdown) · [API Reference](#-api-reference) ·
 
@@ -78,7 +78,6 @@ The platform is architected as a **decoupled, microservice-inspired backend** po
 | **AI Core** | Groq (Llama-3.3-70b) | Primary LLM — fast inference |
 | **Validation** | Pydantic 2.7+ | Request/response schema enforcement |
 | **Charts** | Plotly 5.22+ | Interactive dashboard visualizations |
-| **Concurrency** | Uvicorn + asyncio | ASGI server for async request handling |
 
 ---
 
@@ -117,7 +116,7 @@ salesgenie/
 
 ```
 users
-  └─ user_id (PK), name, email, role, department, created_at
+  └─ user_id , name, email, role, department, created_at
 
 leads
   ├─ lead_id (PK), company_name, industry, contact_name, title
