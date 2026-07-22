@@ -6,10 +6,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.36+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq_LLM-Llama--3.3--70b-F55036?style=for-the-badge)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge&logo=openai&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 **A production-grade, AI-powered B2B Sales Intelligence and Outreach Automation system — built as a full-stack intern project.**
 
@@ -80,10 +77,8 @@ The platform is architected as a **decoupled, microservice-inspired backend** po
 |---|---|---|
 | **Frontend** | Streamlit 1.36+ | Dashboard UI with dark theme, Plotly charts |
 | **Backend** | FastAPI 0.111+ | Async REST API with 6 modular domain routers |
-| **ORM** | SQLAlchemy 2.0+ | Model definitions, session management |
 | **Database** | PostgreSQL 15+ | Relational persistence for all entities |
 | **AI Core** | Groq (Llama-3.3-70b) | Primary LLM — fast inference |
-| **AI Fallback** | OpenAI (GPT-4o-mini) | Secondary LLM if Groq unavailable |
 | **Validation** | Pydantic 2.7+ | Request/response schema enforcement |
 | **Charts** | Plotly 5.22+ | Interactive dashboard visualizations |
 | **Concurrency** | Uvicorn + asyncio | ASGI server for async request handling |
@@ -240,7 +235,6 @@ lead_scores
 - Python **3.11+**
 - PostgreSQL **15+** running locally or via Docker
 - **Groq API key** (free tier available at [console.groq.com](https://console.groq.com))
-- **OpenAI API key** (fallback, optional)
 
 ---
 
@@ -380,8 +374,6 @@ curl http://localhost:8000/dashboard/summary
 Request → Module Handler
     ↓
 Try: Groq API (Llama-3.3-70b-versatile)
-    ↓ [on error / timeout]
-Fallback: OpenAI API (gpt-4o-mini)
     ↓
 Parse JSON response → Persist to DB → Return to frontend
 ```
@@ -418,60 +410,6 @@ All configurable values are environment-variable driven. Use separate `.env.deve
 
 ---
 
-## 📊 Project Structure Summary
-
-```
-Total Python files  : 11
-Backend lines (est.): ~1,800 (modules + database)
-Frontend lines      : ~1,115 (app.py)
-API endpoints       : 25+
-Database tables     : 6
-LLM-powered modules : 4 (Intelligence, Outreach, Scoring, Conversation)
-```
-
----
-
-## 🛡️ Security Considerations
-
-> **Important for production deployments:**
-
-- **.env is excluded from git** — never commit API keys or DB credentials
-- **CORS is open (`"*"`)** in this dev build — restrict to specific origins in production
-- **Add authentication** — implement JWT/OAuth2 before public deployment
-- **Use environment secrets** — store production keys in GitHub Secrets / cloud secret managers
-
----
-
-## 🗺️ Roadmap
-
-- [ ] JWT-based authentication layer
-- [ ] Email delivery integration (SendGrid / Postmark)
-- [ ] Real-time WebSocket notifications for scoring updates
-- [ ] Docker Compose deployment configuration
-- [ ] CI/CD pipeline with GitHub Actions
-- [ ] Unit & integration test suite (pytest)
-- [ ] Multi-tenant support (per-user lead isolation)
-- [ ] Export to CSV / Excel from dashboard
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m 'feat: add your feature description'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request
-
-Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 👩‍💻 Author
 
@@ -483,8 +421,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**Built with ❤️ as part of an AI/ML Internship Project**
+**Built as part of an AI/ML Internship Project**
 
-*SalesGenie AI — Powering smarter B2B sales, one lead at a time.*
+*SalesGenie AI _*
 
 </div>
