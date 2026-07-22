@@ -10,7 +10,7 @@
 
 **A production-grade, AI-powered B2B Sales Intelligence and Outreach Automation system — built as a full-stack intern project.**
 
-[Features](#-features) · [Architecture](#-system-architecture) · [Setup](#-installation--setup) · [Modules](#-module-breakdown) · [API Reference](#-api-reference) · [Contributing](#-contributing)
+[Features](#-features) · [Architecture](#-system-architecture)  · [Modules](#-module-breakdown) · [API Reference](#-api-reference) ·
 
 </div>
 
