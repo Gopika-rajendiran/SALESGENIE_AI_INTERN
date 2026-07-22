@@ -39,7 +39,6 @@ The platform is architected as a **decoupled, microservice-inspired backend** po
 | 🏆 Priority Scoring | Multi-factor priority ranking engine with What-If simulation |
 | 💬 Conversation Intelligence | CRM-style interaction logging + AI-generated digest summaries |
 | 📊 Analytics Dashboard | Real-time KPIs, pipeline funnel, score distribution, outreach stats, top-5 leads |
-| 🌐 REST API | OpenAPI/Swagger docs at `/docs`, ReDoc at `/redoc` |
 
 ---
 
@@ -54,7 +53,7 @@ The platform is architected as a **decoupled, microservice-inspired backend** po
 │  │     app.py :8502     │ ◄───────────────── │  main.py :8000│  │
 │  └──────────────────────┘                    └───────┬───────┘  │
 │                                                      │           │
-│                                            SQLAlchemy ORM        │
+│                                                      |           │
 │                                                      │           │
 │                                             ┌────────▼────────┐  │
 │                                             │   PostgreSQL DB │  │
