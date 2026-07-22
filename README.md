@@ -24,9 +24,8 @@
 - **Generate AI-driven qualification insights** — score leads, identify opportunities, and surface business needs using LLM inference
 - **Compose personalized outreach** — AI-written cold emails and follow-ups tailored to each lead's profile
 - **Track conversations** — log interactions, retrieve history, and get AI-generated conversation summaries
-- **Visualize pipeline health** — real-time KPIs, funnel analytics, and lead ranking dashboards
 
-The platform is architected as a **decoupled, microservice-inspired backend** powered by **FastAPI**, persisted in a relational **PostgreSQL** database through **SQLAlchemy ORM**, and surfaced via a rich **Streamlit** dashboard with a customized dark UI theme.
+The platform is architected as a **decoupled, microservice-inspired backend** powered by **FastAPI**, persisted in a relational **PostgreSQL** database  and surfaced via a rich **Streamlit** dashboard with a customized UI theme.
 
 ---
 
@@ -40,7 +39,6 @@ The platform is architected as a **decoupled, microservice-inspired backend** po
 | 🏆 Priority Scoring | Multi-factor priority ranking engine with What-If simulation |
 | 💬 Conversation Intelligence | CRM-style interaction logging + AI-generated digest summaries |
 | 📊 Analytics Dashboard | Real-time KPIs, pipeline funnel, score distribution, outreach stats, top-5 leads |
-| 🔄 Dual LLM Support | Primary: Groq (Llama-3.3-70b) — Fallback: OpenAI (GPT-4o-mini) |
 | 🌐 REST API | OpenAPI/Swagger docs at `/docs`, ReDoc at `/redoc` |
 
 ---
@@ -423,6 +421,6 @@ All configurable values are environment-variable driven. Use separate `.env.deve
 
 **Built as part of an AI/ML Internship Project**
 
-*SalesGenie AI _*
+*_SalesGenie AI _*
 
 </div>
