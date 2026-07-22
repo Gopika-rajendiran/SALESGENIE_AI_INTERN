@@ -8,7 +8,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq_LLM-Llama--3.3--70b-F55036?style=for-the-badge)
 
-**A production-grade, AI-powered Intelligence and Outreach Automation system — built as an AI intern project.**
+**An AI-powered Intelligence and Outreach Automation system — built as an AI intern project.**
 
 [Features](#-features) · [Architecture](#-system-architecture)  · [Modules](#-module-breakdown) · [API Reference](#-api-reference) ·
 
